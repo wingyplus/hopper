@@ -15,6 +15,12 @@ defmodule Hoper.LowLevel.Objects do
     [?<, Base.encode16(string), ?>]
   end
 
+  # Array objects.
+  @doc false
+  def array(elements) when is_list(elements) do
+    [?[, Enum.intersperse(elements, ?\s), ?]]
+  end
+
   # Name objects.
   @doc false
   def name(name) when is_binary(name) do

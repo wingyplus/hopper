@@ -79,6 +79,30 @@ defmodule Hoper.LowLevel.ObjectsTest do
     end
   end
 
+  describe "array/1" do
+    test "empty array" do
+      assert IO.iodata_to_binary(Objects.array([])) == "[]"
+    end
+
+    test "array with single element" do
+      assert IO.iodata_to_binary(Objects.array([Objects.name("Type")])) == "[/Type]"
+    end
+
+    test "array with multiple elements" do
+      assert IO.iodata_to_binary(Objects.array([
+               Objects.lit_string("hello"),
+               Objects.name("World")
+             ])) == "[(hello) /World]"
+    end
+
+    test "nested array" do
+      assert IO.iodata_to_binary(Objects.array([
+               Objects.array([Objects.name("A")]),
+               Objects.name("B")
+             ])) == "[[/A] /B]"
+    end
+  end
+
   describe "hex_string/1" do
     test "encodes bytes as uppercase hex digits wrapped in angle brackets" do
       assert IO.iodata_to_binary(Objects.hex_string("Nop")) == "<4E6F70>"
