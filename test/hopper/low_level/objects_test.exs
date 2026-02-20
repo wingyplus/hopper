@@ -45,6 +45,40 @@ defmodule Hoper.LowLevel.ObjectsTest do
     end
   end
 
+  describe "name/1" do
+    test "simple name" do
+      assert IO.iodata_to_binary(Objects.name("Name1")) == "/Name1"
+    end
+
+    test "longer name" do
+      assert IO.iodata_to_binary(Objects.name("ASomewhatLongerName")) == "/ASomewhatLongerName"
+    end
+
+    test "encodes space as hex" do
+      assert IO.iodata_to_binary(Objects.name("Lime Green")) == "/Lime#20Green"
+    end
+
+    test "encodes parentheses as hex" do
+      assert IO.iodata_to_binary(Objects.name("paired()parentheses")) == "/paired#28#29parentheses"
+    end
+
+    test "encodes number sign as hex" do
+      assert IO.iodata_to_binary(Objects.name("The_Key_of_F#_Minor")) == "/The_Key_of_F#23_Minor"
+    end
+
+    test "empty name" do
+      assert IO.iodata_to_binary(Objects.name("")) == "/"
+    end
+
+    test "encodes slash as hex" do
+      assert IO.iodata_to_binary(Objects.name("A/B")) == "/A#2FB"
+    end
+
+    test "encodes null byte as hex" do
+      assert IO.iodata_to_binary(Objects.name("A\x00B")) == "/A#00B"
+    end
+  end
+
   describe "hex_string/1" do
     test "encodes bytes as uppercase hex digits wrapped in angle brackets" do
       assert IO.iodata_to_binary(Objects.hex_string("Nop")) == "<4E6F70>"
