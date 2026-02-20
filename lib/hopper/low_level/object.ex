@@ -1,7 +1,22 @@
 defmodule Hoper.LowLevel.Objects do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name}
+  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real}
+
+  @doc false
+  def boolean(value) when is_boolean(value) do
+    %Boolean{value: value}
+  end
+
+  @doc false
+  def integer(value) when is_integer(value) do
+    %Integer{value: value}
+  end
+
+  @doc false
+  def real(value) when is_float(value) do
+    %Real{value: value}
+  end
 
   @doc false
   def lit_string(string) when is_binary(string) do
