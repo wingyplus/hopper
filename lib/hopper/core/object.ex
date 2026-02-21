@@ -3,24 +3,26 @@ defprotocol Hoper.Core.Object do
   def to_iodata(object)
 end
 
+defimpl Hoper.Core.Object, for: Integer do
+  def to_iodata(value), do: Integer.to_string(value)
+end
+
+defimpl Hoper.Core.Object, for: Float do
+  def to_iodata(value), do: Float.to_string(value)
+end
+
+defimpl Hoper.Core.Object, for: Atom do
+  def to_iodata(nil), do: "null"
+end
+
 defmodule Hoper.Core.Objects do
   @moduledoc false
 
-  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream, Null, IndirectObject, IndirectReference}
+  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Dictionary, Stream, IndirectObject, IndirectReference}
 
   @doc false
   def boolean(value) when is_boolean(value) do
     %Boolean{value: value}
-  end
-
-  @doc false
-  def integer(value) when is_integer(value) do
-    %Integer{value: value}
-  end
-
-  @doc false
-  def real(value) when is_float(value) do
-    %Real{value: value}
   end
 
   @doc false
@@ -49,9 +51,6 @@ defmodule Hoper.Core.Objects do
       entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
     }
   end
-
-  @doc false
-  def null(), do: %Null{}
 
   @doc false
   def indirect_object(object_number, generation_number \\ 0, value)

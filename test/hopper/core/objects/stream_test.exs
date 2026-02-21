@@ -29,7 +29,7 @@ defmodule Hoper.Core.Objects.StreamTest do
     test "stream with multiple dictionary entries" do
       assert render(
                Objects.stream(
-                 [{"Filter", Objects.name("FlateDecode")}, {"DL", Objects.integer(100)}],
+                 [{"Filter", Objects.name("FlateDecode")}, {"DL", 100}],
                  "data"
                )
              ) == "<< /Length 4 /Filter /FlateDecode /DL 100 >>\nstream\ndata\nendstream"

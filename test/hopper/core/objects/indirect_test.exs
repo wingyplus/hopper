@@ -13,17 +13,17 @@ defmodule Hoper.Core.Objects.IndirectTest do
     end
 
     test "wraps an integer object" do
-      assert render(Objects.indirect_object(1, 0, Objects.integer(42))) ==
+      assert render(Objects.indirect_object(1, 0, 42)) ==
                "1 0 obj\n42\nendobj"
     end
 
     test "wraps a null object" do
-      assert render(Objects.indirect_object(3, 0, Objects.null())) ==
+      assert render(Objects.indirect_object(3, 0, nil)) ==
                "3 0 obj\nnull\nendobj"
     end
 
     test "generation number defaults to 0" do
-      assert render(Objects.indirect_object(5, Objects.integer(1))) ==
+      assert render(Objects.indirect_object(5, 1)) ==
                "5 0 obj\n1\nendobj"
     end
 

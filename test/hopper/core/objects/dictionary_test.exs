@@ -35,12 +35,12 @@ defmodule Hoper.Core.Objects.DictionaryTest do
     end
 
     test "integer value" do
-      assert render(Objects.dictionary([{"IntegerItem", Objects.integer(12)}])) ==
+      assert render(Objects.dictionary([{"IntegerItem", 12}])) ==
                "<< /IntegerItem 12 >>"
     end
 
     test "real value" do
-      assert render(Objects.dictionary([{"Version", Objects.real(0.01)}])) ==
+      assert render(Objects.dictionary([{"Version", 0.01}])) ==
                "<< /Version 0.01 >>"
     end
 
@@ -68,7 +68,7 @@ defmodule Hoper.Core.Objects.DictionaryTest do
     end
 
     test "nested dictionary" do
-      inner = Objects.dictionary([{"Item1", Objects.real(0.4)}, {"Item2", Objects.boolean(true)}])
+      inner = Objects.dictionary([{"Item1", 0.4}, {"Item2", Objects.boolean(true)}])
 
       assert render(Objects.dictionary([{"Subdictionary", inner}])) ==
                "<< /Subdictionary << /Item1 0.4 /Item2 true >> >>"
