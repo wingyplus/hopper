@@ -2,8 +2,10 @@ defmodule Hoper.Core.Objects.Real do
   @moduledoc false
 
   defstruct [:value]
+end
 
-  def to_iodata(%__MODULE__{value: value}) do
+defimpl Hoper.Core.Object, for: Hoper.Core.Objects.Real do
+  def to_iodata(%{value: value}) do
     Float.to_string(value)
   end
 end

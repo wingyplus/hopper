@@ -1,11 +1,13 @@
 defmodule Hoper.Core.Objects.Name do
   @moduledoc false
 
+  defstruct [:name]
+end
+
+defimpl Hoper.Core.Object, for: Hoper.Core.Objects.Name do
   import Bitwise
 
-  defstruct [:name]
-
-  def to_iodata(%__MODULE__{name: name}) do
+  def to_iodata(%{name: name}) do
     [?/ | encode(name)]
   end
 

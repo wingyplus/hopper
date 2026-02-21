@@ -2,9 +2,9 @@ defmodule Hoper.Core.Objects.StreamTest do
   use ExUnit.Case, async: true
 
   alias Hoper.Core.Objects
-  alias Hoper.Core.Objects.Stream
+  alias Hoper.Core.Object
 
-  defp render(stream), do: IO.iodata_to_binary(Stream.to_iodata(stream))
+  defp render(stream), do: IO.iodata_to_binary(Object.to_iodata(stream))
 
   describe "stream/2" do
     test "empty data" do

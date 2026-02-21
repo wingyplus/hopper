@@ -1,14 +1,13 @@
 defmodule Hoper.Core.Objects.Stream do
   @moduledoc false
 
-  alias Hoper.Core.Objects.{Dictionary, Name}
-  alias Hoper.Core.Objects.Integer, as: IntegerObject
-
   defstruct [:dictionary, :data]
+end
 
-  def to_iodata(%__MODULE__{dictionary: %Dictionary{entries: entries}, data: data}) do
-    length_entry = {%Name{name: "Length"}, %IntegerObject{value: byte_size(data)}}
-    dict_with_length = %Dictionary{entries: [length_entry | entries]}
-    [Dictionary.to_iodata(dict_with_length), "\nstream\n", data, "\nendstream"]
+defimpl Hoper.Core.Object, for: Hoper.Core.Objects.Stream do
+  def to_iodata(%{dictionary: %Hoper.Core.Objects.Dictionary{entries: entries}, data: data}) do
+    length_entry = {%Hoper.Core.Objects.Name{name: "Length"}, %Hoper.Core.Objects.Integer{value: byte_size(data)}}
+    dict_with_length = %Hoper.Core.Objects.Dictionary{entries: [length_entry | entries]}
+    [Hoper.Core.Object.to_iodata(dict_with_length), "\nstream\n", data, "\nendstream"]
   end
 end

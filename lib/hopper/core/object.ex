@@ -1,3 +1,8 @@
+defprotocol Hoper.Core.Object do
+  @doc false
+  def to_iodata(object)
+end
+
 defmodule Hoper.Core.Objects do
   @moduledoc false
 

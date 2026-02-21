@@ -2,8 +2,10 @@ defmodule Hoper.Core.Objects.HexString do
   @moduledoc false
 
   defstruct [:string]
+end
 
-  def to_iodata(%__MODULE__{string: string}) do
+defimpl Hoper.Core.Object, for: Hoper.Core.Objects.HexString do
+  def to_iodata(%{string: string}) do
     [?<, Base.encode16(string), ?>]
   end
 end

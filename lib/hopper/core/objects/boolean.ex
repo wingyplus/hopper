@@ -2,7 +2,9 @@ defmodule Hoper.Core.Objects.Boolean do
   @moduledoc false
 
   defstruct [:value]
+end
 
-  def to_iodata(%__MODULE__{value: true}), do: "true"
-  def to_iodata(%__MODULE__{value: false}), do: "false"
+defimpl Hoper.Core.Object, for: Hoper.Core.Objects.Boolean do
+  def to_iodata(%{value: true}), do: "true"
+  def to_iodata(%{value: false}), do: "false"
 end

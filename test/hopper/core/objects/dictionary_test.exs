@@ -2,9 +2,9 @@ defmodule Hoper.Core.Objects.DictionaryTest do
   use ExUnit.Case, async: true
 
   alias Hoper.Core.Objects
-  alias Hoper.Core.Objects.Dictionary
+  alias Hoper.Core.Object
 
-  defp render(dict), do: IO.iodata_to_binary(Dictionary.to_iodata(dict))
+  defp render(dict), do: IO.iodata_to_binary(Object.to_iodata(dict))
 
   describe "dictionary/1" do
     test "empty dictionary" do
