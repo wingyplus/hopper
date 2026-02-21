@@ -6,7 +6,7 @@ end
 defmodule Hoper.Core.Objects do
   @moduledoc false
 
-  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream}
+  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream, Null, IndirectObject, IndirectReference}
 
   @doc false
   def boolean(value) when is_boolean(value) do
@@ -48,6 +48,23 @@ defmodule Hoper.Core.Objects do
     %Dictionary{
       entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
     }
+  end
+
+  @doc false
+  def null(), do: %Null{}
+
+  @doc false
+  def indirect_object(object_number, generation_number \\ 0, value)
+      when is_integer(object_number) and object_number > 0 and
+             is_integer(generation_number) and generation_number >= 0 do
+    %IndirectObject{object_number: object_number, generation_number: generation_number, value: value}
+  end
+
+  @doc false
+  def indirect_reference(object_number, generation_number \\ 0)
+      when is_integer(object_number) and object_number > 0 and
+             is_integer(generation_number) and generation_number >= 0 do
+    %IndirectReference{object_number: object_number, generation_number: generation_number}
   end
 
   @doc false
