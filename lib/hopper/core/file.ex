@@ -66,7 +66,7 @@ defmodule Hoper.Core.File do
       Objects.dictionary([
         {"Size", length(objects) + 1},
         {"Root", Objects.indirect_reference(root_obj_num, 0)},
-        {"ID", Objects.array([Objects.hex_string(id1), Objects.hex_string(id2)])}
+        {"ID", [Objects.hex_string(id1), Objects.hex_string(id2)]}
       ])
 
     [

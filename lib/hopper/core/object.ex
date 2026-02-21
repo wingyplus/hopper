@@ -15,13 +15,18 @@ defimpl Hoper.Core.Object, for: Atom do
   def to_iodata(nil), do: "null"
 end
 
+defimpl Hoper.Core.Object, for: List do
+  def to_iodata(elements) do
+    [?[, elements |> Enum.map(&Hoper.Core.Object.to_iodata/1) |> Enum.intersperse(?\s), ?]]
+  end
+end
+
 defmodule Hoper.Core.Objects do
   @moduledoc false
 
   alias Hoper.Core.Objects.{
     LitString,
     HexString,
-    Array,
     Name,
     Boolean,
     Dictionary,
@@ -43,11 +48,6 @@ defmodule Hoper.Core.Objects do
   @doc false
   def hex_string(string) when is_binary(string) do
     %HexString{string: string}
-  end
-
-  @doc false
-  def array(elements) when is_list(elements) do
-    %Array{elements: elements}
   end
 
   @doc false

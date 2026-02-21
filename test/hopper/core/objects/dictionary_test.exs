@@ -60,7 +60,7 @@ defmodule Hoper.Core.Objects.DictionaryTest do
     test "array value" do
       assert render(
                Objects.dictionary([
-                 {"Kids", Objects.array([Objects.name("A"), Objects.name("B")])}
+                 {"Kids", [Objects.name("A"), Objects.name("B")]}
                ])
              ) == "<< /Kids [/A /B] >>"
     end
