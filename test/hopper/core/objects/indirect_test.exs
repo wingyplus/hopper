@@ -1,10 +1,8 @@
 defmodule Hoper.Core.Objects.IndirectTest do
   use ExUnit.Case, async: true
 
+  import Hoper.ObjectHelpers
   alias Hoper.Core.Objects
-  alias Hoper.Core.Object
-
-  defp render(obj), do: IO.iodata_to_binary(Object.to_iodata(obj))
 
   describe "indirect_object/3" do
     test "wraps a string object" do
