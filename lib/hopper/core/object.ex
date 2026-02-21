@@ -18,7 +18,17 @@ end
 defmodule Hoper.Core.Objects do
   @moduledoc false
 
-  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Dictionary, Stream, IndirectObject, IndirectReference}
+  alias Hoper.Core.Objects.{
+    LitString,
+    HexString,
+    Array,
+    Name,
+    Boolean,
+    Dictionary,
+    Stream,
+    IndirectObject,
+    IndirectReference
+  }
 
   @doc false
   def boolean(value) when is_boolean(value) do
@@ -48,7 +58,8 @@ defmodule Hoper.Core.Objects do
   @doc false
   def dictionary(entries) when is_list(entries) or is_map(entries) do
     %Dictionary{
-      entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+      entries:
+        Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
     }
   end
 
@@ -56,7 +67,11 @@ defmodule Hoper.Core.Objects do
   def indirect_object(object_number, generation_number \\ 0, value)
       when is_integer(object_number) and object_number > 0 and
              is_integer(generation_number) and generation_number >= 0 do
-    %IndirectObject{object_number: object_number, generation_number: generation_number, value: value}
+    %IndirectObject{
+      object_number: object_number,
+      generation_number: generation_number,
+      value: value
+    }
   end
 
   @doc false
@@ -70,7 +85,8 @@ defmodule Hoper.Core.Objects do
   def stream(entries, data) when (is_list(entries) or is_map(entries)) and is_binary(data) do
     %Stream{
       dictionary: %Dictionary{
-        entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+        entries:
+          Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
       },
       data: data
     }

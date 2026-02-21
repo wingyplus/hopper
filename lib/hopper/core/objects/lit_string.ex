@@ -16,7 +16,7 @@ defimpl Hoper.Core.Object, for: Hoper.Core.Objects.LitString do
   defp escape(<<?\b, rest::binary>>), do: [?\\, ?b | escape(rest)]
   defp escape(<<?\f, rest::binary>>), do: [?\\, ?f | escape(rest)]
   defp escape(<<?\\, rest::binary>>), do: [?\\, ?\\ | escape(rest)]
-  defp escape(<<?( , rest::binary>>), do: [?\\, ?( | escape(rest)]
+  defp escape(<<?(, rest::binary>>), do: [?\\, ?( | escape(rest)]
   defp escape(<<?), rest::binary>>), do: [?\\, ?) | escape(rest)]
   defp escape(<<byte, rest::binary>>), do: [byte | escape(rest)]
 end

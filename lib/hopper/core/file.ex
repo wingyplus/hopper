@@ -29,7 +29,7 @@ defmodule Hoper.Core.File do
 
   defp serialize_body(objects, initial_offset) do
     Enum.reduce(objects, {[], [], initial_offset}, fn obj, {io_acc, off_acc, offset} ->
-      obj_io = [Object.to_iodata(obj), "\n"]
+      obj_io = [Object.to_iodata(obj), ?\n]
       obj_size = IO.iodata_length(obj_io)
       {[io_acc, obj_io], [{obj.object_number, offset} | off_acc], offset + obj_size}
     end)
@@ -44,13 +44,21 @@ defmodule Hoper.Core.File do
       |> Enum.sort_by(fn {num, _} -> num end)
       |> Enum.map(fn {_, offset} -> xref_entry(offset, 0, "n") end)
 
-    ["xref\n0 ", Integer.to_string(object_count + 1), "\n", free | in_use]
+    [
+      "xref",
+      ?\n,
+      Object.to_iodata(0),
+      ~c" ",
+      Object.to_iodata(object_count + 1),
+      ?\n,
+      free | in_use
+    ]
   end
 
   defp xref_entry(offset, gen, type) do
     o = offset |> Integer.to_string() |> String.pad_leading(10, "0")
     g = gen |> Integer.to_string() |> String.pad_leading(5, "0")
-    [o, " ", g, " ", type, " \n"]
+    [o, ~c" ", g, ~c" ", type, ~c" ", ?\n]
   end
 
   defp trailer(objects, root_obj_num, xref_offset, id1, id2) do

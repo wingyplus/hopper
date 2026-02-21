@@ -21,9 +21,8 @@ defmodule Hoper.Core.Objects.StreamTest do
     end
 
     test "stream with Filter entry" do
-      assert render(
-               Objects.stream([{"Filter", Objects.name("FlateDecode")}], "data")
-             ) == "<< /Length 4 /Filter /FlateDecode >>\nstream\ndata\nendstream"
+      assert render(Objects.stream([{"Filter", Objects.name("FlateDecode")}], "data")) ==
+               "<< /Length 4 /Filter /FlateDecode >>\nstream\ndata\nendstream"
     end
 
     test "stream with multiple dictionary entries" do
@@ -37,7 +36,9 @@ defmodule Hoper.Core.Objects.StreamTest do
 
     test "stream with binary data" do
       data = <<0, 1, 2, 3>>
-      assert render(Objects.stream([], data)) == "<< /Length 4 >>\nstream\n" <> data <> "\nendstream"
+
+      assert render(Objects.stream([], data)) ==
+               "<< /Length 4 >>\nstream\n" <> data <> "\nendstream"
     end
   end
 end

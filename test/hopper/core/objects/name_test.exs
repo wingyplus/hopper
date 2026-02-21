@@ -10,7 +10,8 @@ defmodule Hoper.Core.Objects.NameTest do
     end
 
     test "longer name" do
-      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("ASomewhatLongerName"))) == "/ASomewhatLongerName"
+      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("ASomewhatLongerName"))) ==
+               "/ASomewhatLongerName"
     end
 
     test "encodes space as hex" do
@@ -18,11 +19,13 @@ defmodule Hoper.Core.Objects.NameTest do
     end
 
     test "encodes parentheses as hex" do
-      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("paired()parentheses"))) == "/paired#28#29parentheses"
+      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("paired()parentheses"))) ==
+               "/paired#28#29parentheses"
     end
 
     test "encodes number sign as hex" do
-      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("The_Key_of_F#_Minor"))) == "/The_Key_of_F#23_Minor"
+      assert IO.iodata_to_binary(Object.to_iodata(Objects.name("The_Key_of_F#_Minor"))) ==
+               "/The_Key_of_F#23_Minor"
     end
 
     test "empty name" do

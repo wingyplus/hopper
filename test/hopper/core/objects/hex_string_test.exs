@@ -18,7 +18,8 @@ defmodule Hoper.Core.Objects.HexStringTest do
     end
 
     test "binary data" do
-      assert IO.iodata_to_binary(Object.to_iodata(Objects.hex_string(<<0x90, 0x1F, 0xA3>>))) == "<901FA3>"
+      assert IO.iodata_to_binary(Object.to_iodata(Objects.hex_string(<<0x90, 0x1F, 0xA3>>))) ==
+               "<901FA3>"
     end
   end
 end
