@@ -1,7 +1,7 @@
 defmodule Hoper.LowLevel.Objects do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary}
+  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream}
 
   @doc false
   def boolean(value) when is_boolean(value) do
@@ -42,6 +42,16 @@ defmodule Hoper.LowLevel.Objects do
   def dictionary(entries) when is_list(entries) or is_map(entries) do
     %Dictionary{
       entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+    }
+  end
+
+  @doc false
+  def stream(entries, data) when (is_list(entries) or is_map(entries)) and is_binary(data) do
+    %Stream{
+      dictionary: %Dictionary{
+        entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+      },
+      data: data
     }
   end
 end
