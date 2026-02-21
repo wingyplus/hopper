@@ -1,4 +1,4 @@
-defmodule Hoper.LowLevel.Objects.Name do
+defmodule Hoper.Core.Objects.Name do
   @moduledoc false
 
   import Bitwise

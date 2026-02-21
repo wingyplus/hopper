@@ -1,4 +1,4 @@
-defmodule Hoper.LowLevel.Objects.HexString do
+defmodule Hoper.Core.Objects.HexString do
   @moduledoc false
 
   defstruct [:string]

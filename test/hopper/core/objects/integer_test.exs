@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.IntegerTest do
+defmodule Hoper.Core.Objects.IntegerTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Integer
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Integer
 
   describe "integer/1" do
     test "positive integer" do

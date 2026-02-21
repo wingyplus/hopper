@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.LitStringTest do
+defmodule Hoper.Core.Objects.LitStringTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.LitString
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.LitString
 
   describe "lit_string/1" do
     test "wraps string in parentheses" do

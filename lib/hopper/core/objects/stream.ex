@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.Stream do
+defmodule Hoper.Core.Objects.Stream do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{Dictionary, Name}
-  alias Hoper.LowLevel.Objects.Integer, as: IntegerObject
+  alias Hoper.Core.Objects.{Dictionary, Name}
+  alias Hoper.Core.Objects.Integer, as: IntegerObject
 
   defstruct [:dictionary, :data]
 

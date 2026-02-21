@@ -1,4 +1,4 @@
-defmodule Hoper.LowLevel.Objects.Boolean do
+defmodule Hoper.Core.Objects.Boolean do
   @moduledoc false
 
   defstruct [:value]

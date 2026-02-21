@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.Dictionary do
+defmodule Hoper.Core.Objects.Dictionary do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Real}
-  alias Hoper.LowLevel.Objects.Integer, as: IntegerObject
+  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Real}
+  alias Hoper.Core.Objects.Integer, as: IntegerObject
 
   defstruct [:entries]
 

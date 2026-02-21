@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.BooleanTest do
+defmodule Hoper.Core.Objects.BooleanTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Boolean
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Boolean
 
   describe "boolean/1" do
     test "true value" do

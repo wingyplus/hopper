@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.RealTest do
+defmodule Hoper.Core.Objects.RealTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Real
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Real
 
   describe "real/1" do
     test "positive real" do

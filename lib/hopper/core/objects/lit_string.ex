@@ -1,4 +1,4 @@
-defmodule Hoper.LowLevel.Objects.LitString do
+defmodule Hoper.Core.Objects.LitString do
   @moduledoc false
 
   defstruct [:string]

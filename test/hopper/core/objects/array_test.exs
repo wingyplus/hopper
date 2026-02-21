@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.ArrayTest do
+defmodule Hoper.Core.Objects.ArrayTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Array
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Array
 
   describe "array/1" do
     test "empty array" do

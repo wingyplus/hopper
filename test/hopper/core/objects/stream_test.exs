@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.StreamTest do
+defmodule Hoper.Core.Objects.StreamTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Stream
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Stream
 
   defp render(stream), do: IO.iodata_to_binary(Stream.to_iodata(stream))
 

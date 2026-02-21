@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.DictionaryTest do
+defmodule Hoper.Core.Objects.DictionaryTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Dictionary
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Dictionary
 
   defp render(dict), do: IO.iodata_to_binary(Dictionary.to_iodata(dict))
 

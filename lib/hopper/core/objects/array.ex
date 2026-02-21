@@ -1,7 +1,7 @@
-defmodule Hoper.LowLevel.Objects.Array do
+defmodule Hoper.Core.Objects.Array do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Name}
+  alias Hoper.Core.Objects.{LitString, HexString, Name}
 
   defstruct [:elements]
 

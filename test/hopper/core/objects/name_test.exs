@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.NameTest do
+defmodule Hoper.Core.Objects.NameTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.Name
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.Name
 
   describe "name/1" do
     test "simple name" do

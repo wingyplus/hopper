@@ -1,8 +1,8 @@
-defmodule Hoper.LowLevel.Objects.HexStringTest do
+defmodule Hoper.Core.Objects.HexStringTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.LowLevel.Objects
-  alias Hoper.LowLevel.Objects.HexString
+  alias Hoper.Core.Objects
+  alias Hoper.Core.Objects.HexString
 
   describe "hex_string/1" do
     test "encodes bytes as uppercase hex digits wrapped in angle brackets" do

@@ -1,7 +1,7 @@
-defmodule Hoper.LowLevel.Objects do
+defmodule Hoper.Core.Objects do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream}
+  alias Hoper.Core.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary, Stream}
 
   @doc false
   def boolean(value) when is_boolean(value) do
