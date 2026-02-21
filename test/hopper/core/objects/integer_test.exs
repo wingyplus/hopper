@@ -1,7 +1,7 @@
-defmodule Hoper.Core.Objects.IntegerTest do
+defmodule Hopper.Core.Objects.IntegerTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
+  import Hopper.ObjectHelpers
 
   describe "integer" do
     test "positive integer" do

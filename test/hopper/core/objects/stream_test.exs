@@ -1,8 +1,8 @@
-defmodule Hoper.Core.Objects.StreamTest do
+defmodule Hopper.Core.Objects.StreamTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
-  alias Hoper.Core.Objects
+  import Hopper.ObjectHelpers
+  alias Hopper.Core.Objects
 
   describe "stream/2" do
     test "empty data" do

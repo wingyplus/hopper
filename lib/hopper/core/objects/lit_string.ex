@@ -1,10 +1,10 @@
-defmodule Hoper.Core.Objects.LitString do
+defmodule Hopper.Core.Objects.LitString do
   @moduledoc false
 
   defstruct [:string]
 end
 
-defimpl Hoper.Core.Object, for: Hoper.Core.Objects.LitString do
+defimpl Hopper.Core.Object, for: Hopper.Core.Objects.LitString do
   def to_iodata(%{string: string}) do
     [?(, escape(string), ?)]
   end

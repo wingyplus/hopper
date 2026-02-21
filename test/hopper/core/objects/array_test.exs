@@ -1,8 +1,8 @@
-defmodule Hoper.Core.Objects.ArrayTest do
+defmodule Hopper.Core.Objects.ArrayTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
-  alias Hoper.Core.Objects
+  import Hopper.ObjectHelpers
+  alias Hopper.Core.Objects
 
   describe "list as array" do
     test "empty array" do

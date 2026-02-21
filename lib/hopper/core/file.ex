@@ -1,6 +1,6 @@
-defmodule Hoper.Core.File do
-  alias Hoper.Core.{Object, Objects}
-  alias Hoper.Core.Objects.IndirectObject
+defmodule Hopper.Core.File do
+  alias Hopper.Core.{Object, Objects}
+  alias Hopper.Core.Objects.IndirectObject
 
   defstruct [:body, :root_object_number, :id]
 

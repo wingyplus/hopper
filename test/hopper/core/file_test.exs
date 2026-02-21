@@ -1,7 +1,7 @@
-defmodule Hoper.Core.FileTest do
+defmodule Hopper.Core.FileTest do
   use ExUnit.Case, async: true
 
-  alias Hoper.Core.{File, Objects}
+  alias Hopper.Core.{File, Objects}
 
   @fixed_id {<<0xAB>> |> :binary.copy(16), <<0xCD>> |> :binary.copy(16)}
 

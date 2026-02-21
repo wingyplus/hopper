@@ -1,8 +1,8 @@
-defmodule Hoper.Core.Objects.IndirectTest do
+defmodule Hopper.Core.Objects.IndirectTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
-  alias Hoper.Core.Objects
+  import Hopper.ObjectHelpers
+  alias Hopper.Core.Objects
 
   describe "indirect_object/3" do
     test "wraps a string object" do

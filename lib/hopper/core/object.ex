@@ -1,30 +1,30 @@
-defprotocol Hoper.Core.Object do
+defprotocol Hopper.Core.Object do
   @doc false
   def to_iodata(object)
 end
 
-defimpl Hoper.Core.Object, for: Integer do
+defimpl Hopper.Core.Object, for: Integer do
   def to_iodata(value), do: Integer.to_string(value)
 end
 
-defimpl Hoper.Core.Object, for: Float do
+defimpl Hopper.Core.Object, for: Float do
   def to_iodata(value), do: Float.to_string(value)
 end
 
-defimpl Hoper.Core.Object, for: Atom do
+defimpl Hopper.Core.Object, for: Atom do
   def to_iodata(nil), do: "null"
 end
 
-defimpl Hoper.Core.Object, for: List do
+defimpl Hopper.Core.Object, for: List do
   def to_iodata(elements) do
-    [?[, elements |> Enum.map(&Hoper.Core.Object.to_iodata/1) |> Enum.intersperse(?\s), ?]]
+    [?[, elements |> Enum.map(&Hopper.Core.Object.to_iodata/1) |> Enum.intersperse(?\s), ?]]
   end
 end
 
-defmodule Hoper.Core.Objects do
+defmodule Hopper.Core.Objects do
   @moduledoc false
 
-  alias Hoper.Core.Objects.{
+  alias Hopper.Core.Objects.{
     LitString,
     HexString,
     Name,

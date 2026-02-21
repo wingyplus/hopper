@@ -1,7 +1,7 @@
-defmodule Hoper.Core.Objects.RealTest do
+defmodule Hopper.Core.Objects.RealTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
+  import Hopper.ObjectHelpers
 
   describe "float" do
     test "positive real" do

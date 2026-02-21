@@ -1,8 +1,8 @@
-defmodule Hoper.Core.Objects.DictionaryTest do
+defmodule Hopper.Core.Objects.DictionaryTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
-  alias Hoper.Core.Objects
+  import Hopper.ObjectHelpers
+  alias Hopper.Core.Objects
 
   describe "dictionary/1" do
     test "empty dictionary" do

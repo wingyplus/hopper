@@ -1,10 +1,10 @@
-defmodule Hoper.Core.Objects.Name do
+defmodule Hopper.Core.Objects.Name do
   @moduledoc false
 
   defstruct [:name]
 end
 
-defimpl Hoper.Core.Object, for: Hoper.Core.Objects.Name do
+defimpl Hopper.Core.Object, for: Hopper.Core.Objects.Name do
   import Bitwise
 
   def to_iodata(%{name: name}) do

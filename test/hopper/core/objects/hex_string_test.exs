@@ -1,8 +1,8 @@
-defmodule Hoper.Core.Objects.HexStringTest do
+defmodule Hopper.Core.Objects.HexStringTest do
   use ExUnit.Case, async: true
 
-  import Hoper.ObjectHelpers
-  alias Hoper.Core.Objects
+  import Hopper.ObjectHelpers
+  alias Hopper.Core.Objects
 
   describe "hex_string/1" do
     test "encodes bytes as uppercase hex digits wrapped in angle brackets" do
