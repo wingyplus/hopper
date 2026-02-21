@@ -1,7 +1,7 @@
 defmodule Hoper.LowLevel.Objects do
   @moduledoc false
 
-  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real}
+  alias Hoper.LowLevel.Objects.{LitString, HexString, Array, Name, Boolean, Integer, Real, Dictionary}
 
   @doc false
   def boolean(value) when is_boolean(value) do
@@ -36,5 +36,12 @@ defmodule Hoper.LowLevel.Objects do
   @doc false
   def name(name) when is_binary(name) do
     %Name{name: name}
+  end
+
+  @doc false
+  def dictionary(entries) when is_list(entries) or is_map(entries) do
+    %Dictionary{
+      entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+    }
   end
 end
