@@ -22,7 +22,7 @@ defmodule HopperKino.MixProject do
   defp deps do
     [
       {:kino, "~> 0.14"},
-      {:hopper, path: ".."}
+      {:hopper, path: "../hopper"}
     ]
   end
 end
