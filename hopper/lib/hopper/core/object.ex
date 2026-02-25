@@ -85,8 +85,7 @@ defmodule Hopper.Core.Objects do
   def stream(entries, data) when (is_list(entries) or is_map(entries)) and is_binary(data) do
     %Stream{
       dictionary: %Dictionary{
-        entries:
-          Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+        entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {name(key), value} end)
       },
       data: data
     }
