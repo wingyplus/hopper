@@ -1,0 +1,105 @@
+# Untitled notebook
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.18"},
+  {:hopper, path: "."},
+  {:hopper_kino, path: "./hopper_kino"}
+])
+```
+
+## Section
+
+```elixir
+alias Hopper.Core.Objects
+
+# Page content stream: draw "Hello, World!" at position (72, 696)
+content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, World!) Tj\nET\n"
+
+# XMP metadata stream
+metadata =
+  "<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" <>
+    "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" <>
+    "  <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" <>
+    "    <rdf:Description rdf:about=\"\" xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\">\n" <>
+    "      <pdf:Producer>Hopper</pdf:Producer>\n" <>
+    "    </rdf:Description>\n" <>
+    "  </rdf:RDF>\n" <>
+    "</x:xmpmeta>\n" <>
+    "<?xpacket end=\"w\"?>\n"
+
+objects = [
+  # 1: Catalog
+  Objects.indirect_object(
+    1,
+    0,
+    Objects.dictionary([
+      {"Type", Objects.name("Catalog")},
+      {"Pages", Objects.indirect_reference(2)},
+      {"Metadata", Objects.indirect_reference(6)}
+    ])
+  ),
+
+  # 2: Pages
+  Objects.indirect_object(
+    2,
+    0,
+    Objects.dictionary([
+      {"Type", Objects.name("Pages")},
+      {"Kids", [Objects.indirect_reference(3)]},
+      {"Count", 1}
+    ])
+  ),
+
+  # 3: Page
+  Objects.indirect_object(
+    3,
+    0,
+    Objects.dictionary([
+      {"Type", Objects.name("Page")},
+      {"Parent", Objects.indirect_reference(2)},
+      {"MediaBox", [0, 0, 612, 792]},
+      {"Contents", Objects.indirect_reference(4)},
+      {"Resources",
+       Objects.dictionary([
+         {"Font", Objects.dictionary([{"F1", Objects.indirect_reference(5)}])}
+       ])}
+    ])
+  ),
+
+  # 4: Content stream
+  Objects.indirect_object(4, 0, Objects.stream([], content)),
+
+  # 5: Font
+  Objects.indirect_object(
+    5,
+    0,
+    Objects.dictionary([
+      {"Type", Objects.name("Font")},
+      {"Subtype", Objects.name("Type1")},
+      {"BaseFont", Objects.name("Helvetica")},
+      {"Encoding", Objects.name("WinAnsiEncoding")}
+    ])
+  ),
+
+  # 6: Metadata stream
+  Objects.indirect_object(
+    6,
+    0,
+    Objects.stream(
+      [
+        {"Type", Objects.name("Metadata")},
+        {"Subtype", Objects.name("XML")}
+      ],
+      metadata
+    )
+  )
+]
+
+%Hopper.Core.File{
+    body: objects,
+    root_object_number: 1,
+    id: nil
+}
+|> HopperKino.new()
+```
