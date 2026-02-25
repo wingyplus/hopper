@@ -3,7 +3,7 @@
 ```elixir
 Mix.install([
   {:kino, "~> 0.18"},
-  {:hopper, path: "."},
+  {:hopper, path: "./hopper"},
   {:hopper_kino, path: "./hopper_kino"}
 ])
 ```
