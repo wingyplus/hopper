@@ -98,8 +98,7 @@ objects = [
 
 %Hopper.Core.File{
     body: objects,
-    root_object_number: 1,
-    id: nil
+    root_object: {1, 0},
 }
 |> HopperKino.new()
 ```

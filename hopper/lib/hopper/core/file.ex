@@ -4,24 +4,24 @@ defmodule Hopper.Core.File do
   alias Hopper.Core.Objects.IndirectObject
   alias Hopper.Core.Lexical
 
-  defstruct [:body, :root_object_number, :id]
+  defstruct [:body, :id, root_object: {1, 0}]
 
   @type t :: %__MODULE__{
           body: [IndirectObject.t()],
-          root_object_number: pos_integer(),
+          root_object: {pos_integer(), non_neg_integer()},
           id: {binary(), binary()} | nil
         }
 
   @spec build(t()) :: iodata()
-  def build(%__MODULE__{body: objects, root_object_number: root_object_number, id: id}) do
-    {id1, id2} = id || {:crypto.strong_rand_bytes(16), :crypto.strong_rand_bytes(16)}
+  def build(%__MODULE__{body: objects, root_object: {root_obj_num, root_gen_num}, id: id}) do
+    id = id || {:crypto.strong_rand_bytes(16), :crypto.strong_rand_bytes(16)}
 
     hdr = header()
     hdr_size = IO.iodata_length(hdr)
-    {body_iodata, offsets} = serialize_body(objects, hdr_size)
-    xref_offset = hdr_size + IO.iodata_length(body_iodata)
-    xref = xref_table(offsets, length(objects))
-    trlr = trailer(objects, root_object_number, xref_offset, id1, id2)
+    {body_iodata, offsets, xref_offset} = serialize_body(objects, hdr_size)
+    object_count = length(objects)
+    xref = xref_table(offsets, object_count)
+    trlr = trailer(object_count, {root_obj_num, root_gen_num}, xref_offset, id)
 
     [hdr, body_iodata, xref, trlr]
   end
@@ -34,7 +34,7 @@ defmodule Hopper.Core.File do
       obj_size = IO.iodata_length(obj_io)
       {[io_acc, obj_io], [{obj.object_number, offset} | off_acc], offset + obj_size}
     end)
-    |> then(fn {io, offsets, _} -> {io, Enum.reverse(offsets)} end)
+    |> then(fn {io, offsets, final_offset} -> {io, Enum.reverse(offsets), final_offset} end)
   end
 
   defp xref_table(offsets, object_count) do
@@ -62,11 +62,11 @@ defmodule Hopper.Core.File do
     [o, ~c" ", g, ~c" ", type, ~c" ", ?\n]
   end
 
-  defp trailer(objects, root_obj_num, xref_offset, id1, id2) do
+  defp trailer(object_count, {root_obj_num, root_gen_num}, xref_offset, {id1, id2}) do
     dict =
       Objects.dictionary([
-        {"Size", length(objects) + 1},
-        {"Root", Objects.indirect_reference(root_obj_num, 0)},
+        {"Size", object_count + 1},
+        {"Root", Objects.indirect_reference(root_obj_num, root_gen_num)},
         {"ID", [Objects.hex_string(id1), Objects.hex_string(id2)]}
       ])
 

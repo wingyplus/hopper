@@ -31,25 +31,25 @@ defmodule Hopper.Core.FileTest do
   describe "build/1" do
     test "header starts with %PDF-2.0 and binary comment marker" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       assert String.starts_with?(pdf, "%PDF-2.0\n%\xFF\xFF\xFF\xFF\n")
     end
 
     test "header is exactly 15 bytes" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       assert binary_part(pdf, 0, 15) == "%PDF-2.0\n%\xFF\xFF\xFF\xFF\n"
     end
 
     test "ends with %%EOF" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       assert String.ends_with?(pdf, "%%EOF\n")
     end
 
     test "xref free entry is 0000000000 65535 f and exactly 20 bytes" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       [free | _] = extract_xref_entries(pdf)
       assert byte_size(free) == 20
       assert free == "0000000000 65535 f \n"
@@ -57,7 +57,7 @@ defmodule Hopper.Core.FileTest do
 
     test "xref in-use entries are exactly 20 bytes each" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       [_free | entries] = extract_xref_entries(pdf)
 
       for entry <- entries do
@@ -67,14 +67,14 @@ defmodule Hopper.Core.FileTest do
 
     test "startxref offset matches actual position of xref table" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       {xref_pos, _} = :binary.match(pdf, "xref\n")
       assert find_startxref_offset(pdf) == xref_pos
     end
 
     test "offset in xref points to the start of the object" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       [_free, entry1] = extract_xref_entries(pdf)
       offset = entry1 |> binary_part(0, 10) |> String.to_integer()
       assert binary_part(pdf, offset, 6) == "1 0 ob"
@@ -83,7 +83,7 @@ defmodule Hopper.Core.FileTest do
     test "object offsets for multiple objects each point to their start" do
       obj1 = Objects.indirect_object(1, 0, 42)
       obj2 = Objects.indirect_object(2, 0, 99)
-      pdf = render(File.build(%File{body: [obj1, obj2], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj1, obj2], root_object: {1, 0}, id: @fixed_id}))
       [_free, entry1, entry2] = extract_xref_entries(pdf)
       off1 = entry1 |> binary_part(0, 10) |> String.to_integer()
       off2 = entry2 |> binary_part(0, 10) |> String.to_integer()
@@ -93,20 +93,20 @@ defmodule Hopper.Core.FileTest do
 
     test "trailer contains /Size equal to object count + 1" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       assert pdf =~ "/Size 2"
     end
 
     test "trailer contains /Root pointing to root object" do
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       assert pdf =~ "/Root 1 0 R"
     end
 
     test "trailer contains /ID as two hex strings" do
       {id1, id2} = @fixed_id
       obj = Objects.indirect_object(1, 0, 42)
-      pdf = render(File.build(%File{body: [obj], root_object_number: 1, id: @fixed_id}))
+      pdf = render(File.build(%File{body: [obj], root_object: {1, 0}, id: @fixed_id}))
       h1 = Base.encode16(id1)
       h2 = Base.encode16(id2)
       assert pdf =~ "/ID [<#{h1}> <#{h2}>]"
