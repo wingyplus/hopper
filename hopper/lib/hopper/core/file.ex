@@ -1,6 +1,8 @@
 defmodule Hopper.Core.File do
-  alias Hopper.Core.{Object, Objects}
+  alias Hopper.Core.Object
+  alias Hopper.Core.Objects
   alias Hopper.Core.Objects.IndirectObject
+  alias Hopper.Core.Lexical
 
   defstruct [:body, :root_object_number, :id]
 
@@ -24,8 +26,7 @@ defmodule Hopper.Core.File do
     [hdr, body_iodata, xref, trlr]
   end
 
-  # TODO: implements comment (section 7.2.4)
-  defp header, do: ["%PDF-2.0", ?\n, "%\xFF\xFF\xFF\xFF", ?\n]
+  defp header, do: ["%PDF-2.0", ?\n, Lexical.comment("\xFF\xFF\xFF\xFF"), ?\n]
 
   defp serialize_body(objects, initial_offset) do
     Enum.reduce(objects, {[], [], initial_offset}, fn obj, {io_acc, off_acc, offset} ->
