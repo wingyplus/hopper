@@ -76,5 +76,26 @@ defmodule Hopper.Core.Objects.DictionaryTest do
       assert render(Objects.dictionary([{"Key With Space", Objects.boolean(true)}])) ==
                "<< /Key#20With#20Space true >>"
     end
+
+    test "keyword list with atom keys" do
+      assert render(Objects.dictionary(Type: Objects.name("Font"))) ==
+               "<< /Type /Font >>"
+    end
+
+    test "keyword list with multiple atom keys" do
+      assert render(Objects.dictionary(Type: Objects.name("Font"), Subtype: Objects.name("Type1"))) ==
+               "<< /Type /Font /Subtype /Type1 >>"
+    end
+
+    test "map with atom keys" do
+      assert render(Objects.dictionary(%{Type: Objects.name("Catalog")})) ==
+               "<< /Type /Catalog >>"
+    end
+
+    test "atom key produces same output as equivalent binary key" do
+      atom_result = render(Objects.dictionary(Type: Objects.name("Font")))
+      binary_result = render(Objects.dictionary([{"Type", Objects.name("Font")}]))
+      assert atom_result == binary_result
+    end
   end
 end

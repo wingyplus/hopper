@@ -58,8 +58,7 @@ defmodule Hopper.Core.Objects do
   @doc false
   def dictionary(entries) when is_list(entries) or is_map(entries) do
     %Dictionary{
-      entries:
-        Enum.map(entries, fn {key, value} when is_binary(key) -> {%Name{name: key}, value} end)
+      entries: Enum.map(entries, fn {key, value} -> {name(normalize_key(key)), value} end)
     }
   end
 
@@ -84,10 +83,11 @@ defmodule Hopper.Core.Objects do
   @doc false
   def stream(entries, data) when (is_list(entries) or is_map(entries)) and is_binary(data) do
     %Stream{
-      dictionary: %Dictionary{
-        entries: Enum.map(entries, fn {key, value} when is_binary(key) -> {name(key), value} end)
-      },
+      dictionary: dictionary(entries),
       data: data
     }
   end
+
+  defp normalize_key(key) when is_binary(key), do: key
+  defp normalize_key(key) when is_atom(key), do: Atom.to_string(key)
 end
