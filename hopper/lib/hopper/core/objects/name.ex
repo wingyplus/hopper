@@ -1,6 +1,8 @@
 defmodule Hopper.Core.Objects.Name do
   @moduledoc false
 
+  @type t :: %__MODULE__{}
+
   defstruct [:name]
 end
 

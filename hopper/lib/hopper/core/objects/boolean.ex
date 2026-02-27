@@ -1,6 +1,8 @@
 defmodule Hopper.Core.Objects.Boolean do
   @moduledoc false
 
+  @type t :: %__MODULE__{}
+
   defstruct [:value]
 end
 

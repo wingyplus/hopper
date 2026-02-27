@@ -61,7 +61,7 @@ defmodule Hopper.Core.DocumentTest do
 
     test "optional :names key is included when supplied" do
       pages_ref = Objects.indirect_reference(2)
-      names_dict = Objects.dictionary([{"EmbeddedFiles", Objects.indirect_reference(7)}])
+      names_dict = Objects.dictionary([{:EmbeddedFiles, Objects.indirect_reference(7)}])
       result = render(Document.catalog(pages_ref, names: names_dict))
       assert result =~ "/Names"
     end
@@ -165,8 +165,8 @@ defmodule Hopper.Core.DocumentTest do
     test "optional :resources dictionary is included when supplied" do
       parent_ref = Objects.indirect_reference(2)
       font_ref = Objects.indirect_reference(5)
-      font_dict = Objects.dictionary([{"F1", font_ref}])
-      resources = Objects.dictionary([{"Font", font_dict}])
+      font_dict = Objects.dictionary(F1: font_ref)
+      resources = Objects.dictionary(Font: font_dict)
 
       result = render(Document.page(parent_ref, [0, 0, 612, 792], resources: resources))
       assert result =~ "/Font"
@@ -202,7 +202,7 @@ defmodule Hopper.Core.DocumentTest do
     test "page with all optional keys" do
       parent_ref = Objects.indirect_reference(2)
       contents_ref = Objects.indirect_reference(4)
-      resources = Objects.dictionary([{"Font", Objects.dictionary([])}])
+      resources = Objects.dictionary(Font: Objects.dictionary([]))
 
       result =
         render(
