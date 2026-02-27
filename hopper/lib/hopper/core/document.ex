@@ -131,7 +131,7 @@ defmodule Hopper.Core.Document do
   end
 
   @doc """
-  Builds a Page Tree node dictionary (§7.7.3.2).
+  Builds a Page Tree node dictionary (§7.7.3.2, Table 30).
 
   The `/Type` key is always set to `/Pages`. `kids` must be a list of
   `%IndirectReference{}` values pointing to child nodes or page objects.
@@ -140,8 +140,8 @@ defmodule Hopper.Core.Document do
 
   ## Options
 
-    * `:parent` — an `%IndirectReference{}` to the parent Pages node
-      (required for all non-root nodes)
+    * `:parent` — an `%IndirectReference{}` to the parent Pages node;
+      required for all non-root nodes, must be absent on the root node
 
   ## Examples
 
@@ -154,15 +154,14 @@ defmodule Hopper.Core.Document do
   """
   @spec page_tree([IndirectReference.t()], non_neg_integer(), keyword()) ::
           Hopper.Core.Objects.Dictionary.t()
-  def page_tree(kids, count, opts \\ [])
-      when is_list(kids) and is_integer(count) and count >= 0 do
+  def page_tree(kids, count, opts \\ []) do
     [Type: Objects.name("Pages"), Kids: kids, Count: count]
     |> maybe_put(:Parent, opts[:parent])
     |> Objects.dictionary()
   end
 
   @doc """
-  Builds a Page object dictionary (§7.7.3.3).
+  Builds a Page object dictionary (§7.7.3.3, Table 31).
 
   The `/Type` key is always set to `/Page`. `parent_ref` must be an
   `%IndirectReference{}` pointing to the parent Pages node.
@@ -176,8 +175,40 @@ defmodule Hopper.Core.Document do
     * `:resources` — a `%Dictionary{}` for page resources (fonts, images, etc.)
     * `:contents` — an `%IndirectReference{}` or list of `%IndirectReference{}`
       for the page content stream(s); omit if the page has no content
+      (an empty list is not permitted by the spec)
     * `:rotate` — an integer multiple of 90 for page rotation (default 0)
-    * `:crop_box` — a four-element list `[llx, lly, urx, ury]`
+    * `:crop_box` — a four-element list `[llx, lly, urx, ury]` (§14.11.2)
+    * `:bleed_box` — a four-element list `[llx, lly, urx, ury]` (§14.11.2)
+    * `:trim_box` — a four-element list `[llx, lly, urx, ury]` (§14.11.2)
+    * `:art_box` — a four-element list `[llx, lly, urx, ury]` (§14.11.2)
+    * `:box_color_info` — a `%Dictionary{}` for page boundary guidelines (§14.11.2.2)
+    * `:group` — a `%Dictionary{}` for the page group (transparent imaging model) (§11.4.7)
+    * `:thumb` — a stream object for the page thumbnail image (§12.3.4)
+    * `:b` — a list of `%IndirectReference{}` to article beads on the page (§12.4.3)
+    * `:dur` — a number giving the page display duration in seconds for presentations (§12.4.4)
+    * `:trans` — a `%Dictionary{}` for the slide transition effect (§12.4.4)
+    * `:annots` — a list of `%IndirectReference{}` for page annotations (§12.5)
+    * `:aa` — a `%Dictionary{}` for additional-actions (open/close) (§12.6.3)
+    * `:metadata` — an `%IndirectReference{}` to the XMP metadata stream (§14.3.2)
+    * `:piece_info` — a `%Dictionary{}` for page-piece application data (§14.5)
+    * `:last_modified` — a date string for when the page contents were last modified;
+      required when `:piece_info` is present (§7.9.4)
+    * `:struct_parents` — an integer key into the structural parent tree;
+      required when the page contains structural content items (§14.7.5.4)
+    * `:id` — a byte string for the Web Capture content set identifier (§14.10.6)
+    * `:pz` — a number giving the page's preferred zoom factor (§14.10.6)
+    * `:separation_info` — a `%Dictionary{}` for colour separation info (§14.11.4)
+    * `:tabs` — a `%Name{}` for annotation tab order: `R`, `C`, `S`, `A`, or `W` (§12.5)
+    * `:template_instantiated` — a `%Name{}` naming the originating page object
+      when this page was created from a named page object (§12.7.7)
+    * `:pres_steps` — a `%Dictionary{}` for sub-page navigation (§12.4.4.2)
+    * `:user_unit` — a number giving the size of default user space units in multiples
+      of 1/72 inch (default 1.0)
+    * `:vp` — a list of viewport dictionaries specifying rectangular regions (§14.14)
+    * `:af` — a list of file specification dictionaries for associated files (§14.13)
+    * `:output_intents` — a list of output intent dictionaries for this page (§14.11.5)
+    * `:d_part` — an `%IndirectReference{}` to the DPart dictionary whose page range
+      includes this page; required when the page is within a DPart range (§14.12.3)
 
   ## Examples
 
@@ -199,6 +230,32 @@ defmodule Hopper.Core.Document do
     |> maybe_put(:Contents, opts[:contents])
     |> maybe_put(:Rotate, opts[:rotate])
     |> maybe_put(:CropBox, opts[:crop_box])
+    |> maybe_put(:BleedBox, opts[:bleed_box])
+    |> maybe_put(:TrimBox, opts[:trim_box])
+    |> maybe_put(:ArtBox, opts[:art_box])
+    |> maybe_put(:BoxColorInfo, opts[:box_color_info])
+    |> maybe_put(:Group, opts[:group])
+    |> maybe_put(:Thumb, opts[:thumb])
+    |> maybe_put(:B, opts[:b])
+    |> maybe_put(:Dur, opts[:dur])
+    |> maybe_put(:Trans, opts[:trans])
+    |> maybe_put(:Annots, opts[:annots])
+    |> maybe_put(:AA, opts[:aa])
+    |> maybe_put(:Metadata, opts[:metadata])
+    |> maybe_put(:PieceInfo, opts[:piece_info])
+    |> maybe_put(:LastModified, opts[:last_modified])
+    |> maybe_put(:StructParents, opts[:struct_parents])
+    |> maybe_put(:ID, opts[:id])
+    |> maybe_put(:PZ, opts[:pz])
+    |> maybe_put(:SeparationInfo, opts[:separation_info])
+    |> maybe_put(:Tabs, opts[:tabs])
+    |> maybe_put(:TemplateInstantiated, opts[:template_instantiated])
+    |> maybe_put(:PresSteps, opts[:pres_steps])
+    |> maybe_put(:UserUnit, opts[:user_unit])
+    |> maybe_put(:VP, opts[:vp])
+    |> maybe_put(:AF, opts[:af])
+    |> maybe_put(:OutputIntents, opts[:output_intents])
+    |> maybe_put(:DPart, opts[:d_part])
     |> Objects.dictionary()
   end
 
