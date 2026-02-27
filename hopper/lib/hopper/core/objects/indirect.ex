@@ -23,6 +23,8 @@ end
 defmodule Hopper.Core.Objects.IndirectReference do
   @moduledoc false
 
+  @type t :: %__MODULE__{}
+
   defstruct [:object_number, :generation_number]
 end
 

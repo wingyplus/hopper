@@ -1,6 +1,8 @@
 defmodule Hopper.Core.Objects.LitString do
   @moduledoc false
 
+  @type t :: %__MODULE__{}
+
   defstruct [:string]
 end
 

@@ -83,7 +83,9 @@ defmodule Hopper.Core.Objects.DictionaryTest do
     end
 
     test "keyword list with multiple atom keys" do
-      assert render(Objects.dictionary(Type: Objects.name("Font"), Subtype: Objects.name("Type1"))) ==
+      assert render(
+               Objects.dictionary(Type: Objects.name("Font"), Subtype: Objects.name("Type1"))
+             ) ==
                "<< /Type /Font /Subtype /Type1 >>"
     end
 

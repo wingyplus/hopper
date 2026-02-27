@@ -1,6 +1,8 @@
 defmodule Hopper.Core.Objects.Dictionary do
   @moduledoc false
 
+  @type t :: %__MODULE__{}
+
   defstruct [:entries]
 end
 

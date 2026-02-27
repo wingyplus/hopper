@@ -31,7 +31,7 @@ defmodule HopperKinoTest do
           Objects.indirect_object(2, 0, pages),
           Objects.indirect_object(3, 0, page)
         ],
-        root_object_number: 1,
+        root_object: {1, 0},
         id: {:crypto.strong_rand_bytes(16), :crypto.strong_rand_bytes(16)}
       }
 
