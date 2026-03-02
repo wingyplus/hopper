@@ -4,19 +4,20 @@ defmodule Hopper.Core.File do
   alias Hopper.Core.Objects.IndirectObject
   alias Hopper.Core.Lexical
 
-  defstruct [:body, :id, root_object: {1, 0}]
+  defstruct [:version, :body, :id, root_object: {1, 0}]
 
   @type t :: %__MODULE__{
+          version: String.t(),
           body: [IndirectObject.t()],
           root_object: {pos_integer(), non_neg_integer()},
           id: {binary(), binary()} | nil
         }
 
   @spec build(t()) :: iodata()
-  def build(%__MODULE__{body: objects, root_object: {root_obj_num, root_gen_num}, id: id}) do
+  def build(%__MODULE__{version: version, body: objects, root_object: {root_obj_num, root_gen_num}, id: id}) do
     id = id || {:crypto.strong_rand_bytes(16), :crypto.strong_rand_bytes(16)}
 
-    hdr = header()
+    hdr = header(version)
     hdr_size = IO.iodata_length(hdr)
     {body_iodata, offsets, xref_offset} = serialize_body(objects, hdr_size)
     object_count = length(objects)
@@ -26,7 +27,7 @@ defmodule Hopper.Core.File do
     [hdr, body_iodata, xref, trlr]
   end
 
-  defp header, do: ["%PDF-2.0", ?\n, Lexical.comment("\xFF\xFF\xFF\xFF"), ?\n]
+  defp header(version), do: ["%PDF-", version, ?\n, Lexical.comment("\xFF\xFF\xFF\xFF"), ?\n]
 
   defp serialize_body(objects, initial_offset) do
     Enum.reduce(objects, {[], [], initial_offset}, fn obj, {io_acc, off_acc, offset} ->
