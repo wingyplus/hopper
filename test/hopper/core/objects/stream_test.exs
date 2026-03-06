@@ -18,18 +18,27 @@ defmodule Hopper.Core.Objects.StreamTest do
       assert render(Objects.stream([], data)) == "<< /Length 3 >>\nstream\nabc\nendstream"
     end
 
-    test "stream with Filter entry" do
-      assert render(Objects.stream([{"Filter", Objects.name("FlateDecode")}], "data")) ==
-               "<< /Length 4 /Filter /FlateDecode >>\nstream\ndata\nendstream"
+    test "stream with FlateDecode filter compresses data" do
+      raw = "data"
+      compressed = :zlib.compress(raw)
+
+      assert render(Objects.stream([{"Filter", Objects.name("FlateDecode")}], raw)) ==
+               "<< /Length #{byte_size(compressed)} /Filter /FlateDecode >>\nstream\n" <>
+                 compressed <> "\nendstream"
     end
 
-    test "stream with multiple dictionary entries" do
+    test "stream with multiple dictionary entries encodes data" do
+      raw = "data"
+      compressed = :zlib.compress(raw)
+
       assert render(
                Objects.stream(
                  [{"Filter", Objects.name("FlateDecode")}, {"DL", 100}],
-                 "data"
+                 raw
                )
-             ) == "<< /Length 4 /Filter /FlateDecode /DL 100 >>\nstream\ndata\nendstream"
+             ) ==
+               "<< /Length #{byte_size(compressed)} /Filter /FlateDecode /DL 100 >>\nstream\n" <>
+                 compressed <> "\nendstream"
     end
 
     test "stream with binary data" do
