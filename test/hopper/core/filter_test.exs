@@ -75,29 +75,29 @@ defmodule Hopper.Core.FilterTest do
     test "encodes a run of identical bytes" do
       # 5 bytes of 0xAA → length byte (257-5=252), then the byte, then EOD
       encoded = Filter.encode(<<0xAA, 0xAA, 0xAA, 0xAA, 0xAA>>, Objects.name("RunLengthDecode"))
-      assert encoded == <<252, 0xAA, 128>>
+      assert IO.iodata_to_binary(encoded) == <<252, 0xAA, 128>>
     end
 
     test "encodes literal (non-repeating) bytes" do
       # 3 different bytes → length byte (3-1=2), then the 3 bytes, then EOD
       encoded = Filter.encode(<<1, 2, 3>>, Objects.name("RunLengthDecode"))
-      assert encoded == <<2, 1, 2, 3, 128>>
+      assert IO.iodata_to_binary(encoded) == <<2, 1, 2, 3, 128>>
     end
 
     test "encodes mixed runs and literals" do
       # [1, 2] literals then [3, 3, 3] run
       encoded = Filter.encode(<<1, 2, 3, 3, 3>>, Objects.name("RunLengthDecode"))
       # literals: <<1, 1, 2>>, run: <<254, 3>>, EOD: <<128>>
-      assert encoded == <<1, 1, 2, 254, 3, 128>>
+      assert IO.iodata_to_binary(encoded) == <<1, 1, 2, 254, 3, 128>>
     end
 
     test "terminates with EOD byte (128)" do
       encoded = Filter.encode("x", Objects.name("RunLengthDecode"))
-      assert :binary.last(encoded) == 128
+      assert :binary.last(IO.iodata_to_binary(encoded)) == 128
     end
 
     test "empty data produces only EOD" do
-      assert Filter.encode("", Objects.name("RunLengthDecode")) == <<128>>
+      assert IO.iodata_to_binary(Filter.encode("", Objects.name("RunLengthDecode"))) == <<128>>
     end
   end
 
