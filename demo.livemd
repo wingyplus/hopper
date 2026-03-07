@@ -7,10 +7,10 @@ Mix.install([
 ])
 ```
 
-## Section
+## Basic PDF
 
 ```elixir
-alias Hopper.Core.Objects
+alias Hopper.Core.{Objects, Filter}
 
 # Page content stream: draw "Hello, World!" at position (72, 696)
 content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, World!) Tj\nET\n"
@@ -96,8 +96,142 @@ objects = [
 ]
 
 %Hopper.Core.File{
-    body: objects,
-    root_object: {1, 0},
+  version: "2.0",
+  body: objects,
+  root_object: {1, 0}
 }
+|> Kino.Render.to_livebook()
+```
+
+## Filters
+
+PDF streams can carry a `Filter` entry to compress or encode their data.
+Hopper applies the filter automatically when serializing the stream.
+
+### FlateDecode (zlib compression)
+
+```elixir
+content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, FlateDecode!) Tj\nET\n"
+
+objects = [
+  Objects.indirect_object(1, 0, Objects.dictionary([
+    {"Type", Objects.name("Catalog")},
+    {"Pages", Objects.indirect_reference(2)}
+  ])),
+  Objects.indirect_object(2, 0, Objects.dictionary([
+    {"Type", Objects.name("Pages")},
+    {"Kids", [Objects.indirect_reference(3)]},
+    {"Count", 1}
+  ])),
+  Objects.indirect_object(3, 0, Objects.dictionary([
+    {"Type", Objects.name("Page")},
+    {"Parent", Objects.indirect_reference(2)},
+    {"MediaBox", [0, 0, 612, 792]},
+    {"Contents", Objects.indirect_reference(4)},
+    {"Resources", Objects.dictionary([
+      {"Font", Objects.dictionary([{"F1", Objects.indirect_reference(5)}])}
+    ])}
+  ])),
+  # Content stream compressed with FlateDecode
+  Objects.indirect_object(4, 0, Objects.stream(
+    [{"Filter", Objects.name("FlateDecode")}],
+    content
+  )),
+  Objects.indirect_object(5, 0, Objects.dictionary([
+    {"Type", Objects.name("Font")},
+    {"Subtype", Objects.name("Type1")},
+    {"BaseFont", Objects.name("Helvetica")},
+    {"Encoding", Objects.name("WinAnsiEncoding")}
+  ]))
+]
+
+%Hopper.Core.File{version: "2.0", body: objects, root_object: {1, 0}}
+|> Kino.Render.to_livebook()
+```
+
+### ASCIIHexDecode
+
+```elixir
+content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, ASCIIHex!) Tj\nET\n"
+
+objects = [
+  Objects.indirect_object(1, 0, Objects.dictionary([
+    {"Type", Objects.name("Catalog")},
+    {"Pages", Objects.indirect_reference(2)}
+  ])),
+  Objects.indirect_object(2, 0, Objects.dictionary([
+    {"Type", Objects.name("Pages")},
+    {"Kids", [Objects.indirect_reference(3)]},
+    {"Count", 1}
+  ])),
+  Objects.indirect_object(3, 0, Objects.dictionary([
+    {"Type", Objects.name("Page")},
+    {"Parent", Objects.indirect_reference(2)},
+    {"MediaBox", [0, 0, 612, 792]},
+    {"Contents", Objects.indirect_reference(4)},
+    {"Resources", Objects.dictionary([
+      {"Font", Objects.dictionary([{"F1", Objects.indirect_reference(5)}])}
+    ])}
+  ])),
+  # Content stream encoded as ASCII hex
+  Objects.indirect_object(4, 0, Objects.stream(
+    [{"Filter", Objects.name("ASCIIHexDecode")}],
+    content
+  )),
+  Objects.indirect_object(5, 0, Objects.dictionary([
+    {"Type", Objects.name("Font")},
+    {"Subtype", Objects.name("Type1")},
+    {"BaseFont", Objects.name("Helvetica")},
+    {"Encoding", Objects.name("WinAnsiEncoding")}
+  ]))
+]
+
+%Hopper.Core.File{version: "2.0", body: objects, root_object: {1, 0}}
+|> Kino.Render.to_livebook()
+```
+
+### Chained filters: FlateDecode then ASCIIHexDecode
+
+When a list of filters is given, the PDF reader decodes left-to-right.
+Hopper encodes in reverse order so the bytes on disk are ready to be
+decoded that way.
+
+```elixir
+content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, chained filters!) Tj\nET\n"
+
+objects = [
+  Objects.indirect_object(1, 0, Objects.dictionary([
+    {"Type", Objects.name("Catalog")},
+    {"Pages", Objects.indirect_reference(2)}
+  ])),
+  Objects.indirect_object(2, 0, Objects.dictionary([
+    {"Type", Objects.name("Pages")},
+    {"Kids", [Objects.indirect_reference(3)]},
+    {"Count", 1}
+  ])),
+  Objects.indirect_object(3, 0, Objects.dictionary([
+    {"Type", Objects.name("Page")},
+    {"Parent", Objects.indirect_reference(2)},
+    {"MediaBox", [0, 0, 612, 792]},
+    {"Contents", Objects.indirect_reference(4)},
+    {"Resources", Objects.dictionary([
+      {"Font", Objects.dictionary([{"F1", Objects.indirect_reference(5)}])}
+    ])}
+  ])),
+  # Reader decodes: ASCIIHex first, then Flate.
+  # Hopper encodes:  Flate first, then ASCIIHex.
+  Objects.indirect_object(4, 0, Objects.stream(
+    [{"Filter", [Objects.name("ASCIIHexDecode"), Objects.name("FlateDecode")]}],
+    content
+  )),
+  Objects.indirect_object(5, 0, Objects.dictionary([
+    {"Type", Objects.name("Font")},
+    {"Subtype", Objects.name("Type1")},
+    {"BaseFont", Objects.name("Helvetica")},
+    {"Encoding", Objects.name("WinAnsiEncoding")}
+  ]))
+]
+
+%Hopper.Core.File{version: "2.0", body: objects, root_object: {1, 0}}
 |> Kino.Render.to_livebook()
 ```
