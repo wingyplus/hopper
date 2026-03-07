@@ -13,7 +13,13 @@ Mix.install([
 alias Hopper.Core.{Objects, Filter}
 
 # Page content stream: draw "Hello, World!" at position (72, 696)
-content = "BT\n/F1 24 Tf\n72 696 Td\n(Hello, World!) Tj\nET\n"
+content = """
+BT
+/F1 24 Tf
+72 696 Td
+(Hello, World!) Tj
+ET
+"""
 
 # XMP metadata stream
 metadata =
