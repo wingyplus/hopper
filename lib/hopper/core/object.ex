@@ -88,6 +88,17 @@ defmodule Hopper.Core.Objects do
     }
   end
 
+  @doc false
+  def stream(entries, operators)
+      when (is_list(entries) or is_map(entries)) and is_list(operators) do
+    data =
+      operators
+      |> Enum.map(&Hopper.Core.Operator.to_iodata/1)
+      |> IO.iodata_to_binary()
+
+    stream(entries, data)
+  end
+
   defp normalize_key(key) when is_binary(key), do: key
   defp normalize_key(key) when is_atom(key), do: Atom.to_string(key)
 end

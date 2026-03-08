@@ -12,7 +12,7 @@ defimpl Hopper.Core.Object, for: Hopper.Core.Objects.Stream do
     encoded_data = apply_filters(data, entries)
     length_entry = {%Name{name: "Length"}, byte_size(encoded_data)}
     dict_with_length = %Dictionary{entries: [length_entry | entries]}
-    [Hopper.Core.Object.to_iodata(dict_with_length), "\nstream\n", encoded_data, "\nendstream"]
+    [Hopper.Core.Object.to_iodata(dict_with_length), ?\n, "stream", ?\n, encoded_data, ?\n, "endstream"]
   end
 
   defp apply_filters(data, entries) do
