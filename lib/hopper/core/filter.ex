@@ -73,4 +73,5 @@ defmodule Hopper.Core.Filter do
   defp module!("DCTDecode"), do: Hopper.Core.Filters.DCTDecode
   defp module!("JPXDecode"), do: Hopper.Core.Filters.JPXDecode
   defp module!("Crypt"), do: Hopper.Core.Filters.Crypt
+  defp module!("BrotliDecode"), do: Hopper.Core.Filters.BrotliDecode
 end

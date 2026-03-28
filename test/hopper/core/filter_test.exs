@@ -101,6 +101,34 @@ defmodule Hopper.Core.FilterTest do
     end
   end
 
+  describe "BrotliDecode" do
+    test "compresses data with brotli" do
+      data = "Hello, World!"
+      encoded = Filter.encode(data, Objects.name("BrotliDecode"))
+      {:ok, decompressed} = :brotli.decode(encoded)
+      assert decompressed == data
+    end
+
+    test "empty data" do
+      encoded = Filter.encode("", Objects.name("BrotliDecode"))
+      {:ok, decompressed} = :brotli.decode(encoded)
+      assert decompressed == ""
+    end
+
+    test "binary data" do
+      data = <<0, 1, 2, 3, 4, 5>>
+      encoded = Filter.encode(data, Objects.name("BrotliDecode"))
+      {:ok, decompressed} = :brotli.decode(encoded)
+      assert decompressed == data
+    end
+
+    test "round-trip encode then decode" do
+      data = "PDF brotli filter round-trip test"
+      encoded = Filter.encode(data, Objects.name("BrotliDecode"))
+      assert Filter.decode(encoded, Objects.name("BrotliDecode")) == data
+    end
+  end
+
   describe "pass-through filters" do
     test "DCTDecode passes data unchanged" do
       data = <<0xFF, 0xD8, 0xFF>>
