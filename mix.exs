@@ -25,7 +25,8 @@ defmodule Hopper.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:kino, "~> 0.14", optional: true}
+      {:kino, "~> 0.14", optional: true},
+      {:brotli, "~> 0.3"}
     ]
   end
 end
